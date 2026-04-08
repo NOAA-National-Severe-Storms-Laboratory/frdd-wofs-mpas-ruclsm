@@ -2466,11 +2466,11 @@ contains
 ! field capacity
    fc=ref
    fex_fc=1.
-   if(soilmois(1) > fc .or. (qvatm-qvg) > 0.) then
+   if((soilmois(1)+qmin) > fc .or. (qvatm-qvg) > 0.) then
       soilres = 1.
    else
-      fex_fc=min(1.,soilmois(1)/fc)
-      !fex_fc=max(fex_fc,0.01)
+      fex_fc=min(1.,(soilmois(1)+qmin)/fc)
+      fex_fc=max(fex_fc,0.01)
       soilres=0.25*(1.-cos(piconst*fex_fc))**2.
    endif
    !if ( wrf_at_debug_level(lsmruc_dbg_lvl) ) then
