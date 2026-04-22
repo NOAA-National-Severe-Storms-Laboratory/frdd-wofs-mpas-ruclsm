@@ -852,6 +852,15 @@ contains
          rhonewsn = 200.
          if(snow(i,j).gt.0. .and. snowh(i,j).gt.0.) then
            rhosn = snow(i,j)/snowh(i,j)
+           ! If rhosn > 917, then snowh is impossible for the given SWE --
+           ! this indicates bad init data (near-zero snowh, not a real value).
+           ! Correct both rhosn and snowh to be physically consistent.
+           if(rhosn .gt. 917.) then
+             print *,'RHOSN IMPOSSIBLE: snow=',snow(i,j),' snowh=',snowh(i,j), &
+                     ' computed rhosn=',rhosn,' (exceeds ice density 917), using default 300. i,j=',i,j
+             rhosn = 300.
+             snowh(i,j) = snow(i,j) / rhosn
+           endif
          else
            rhosn = 300.
          endif
